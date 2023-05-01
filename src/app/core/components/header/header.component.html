@@ -1,9 +1,32 @@
-<mat-toolbar class="mat-elev">
-  <span>Logo</span>
-
-  <a mat-button class="mr-3 hover:bg-stone-500" [routerLink]="['']">Home</a>
-
+<header *ngIf="userInfo$ | async as userInfo" class="px-8 h-16 bg-slate-500">
   <button mat-icon-button class="sm:hidden hover:bg-gray-500">
     <mat-icon>menu</mat-icon>
   </button>
-</mat-toolbar>
+
+  <span>Logo</span>
+
+  <a mat-button class="ml-3" [routerLink]="['']">Home</a>
+  <a mat-button class="ml-3" [routerLink]="['login']">Login</a>
+  <a mat-button class="ml-3" [routerLink]="['register']">Register</a>
+  <a mat-button class="ml-3" [routerLink]="['book']">Book</a>
+
+  <span *ngIf="!userInfo.role">undefined</span>
+  <span *ngIf="userInfo.role === 'User'">Role1</span>
+  <span *ngIf="userInfo.role === 'Eatery'">Role2</span>
+
+  <button mat-icon-button [matMenuTriggerFor]="menu" class="h-full float-right">
+    <mat-icon class="h-full flex items-center text-3xl w-8">account_circle</mat-icon>
+  </button>
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item [routerLink]="['/profile']">
+      <mat-icon>person</mat-icon>
+      <span>Profile</span>
+    </button>
+
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Logout</span>
+    </button>
+  </mat-menu>
+</header>

@@ -8,11 +8,11 @@ import { FooterComponent } from "../footer/footer.component";
   standalone: true,
   selector: 'app-layout',
   template: `
-    <app-header></app-header>
-    <main class="h-full">
-      <router-outlet></router-outlet>
-    </main>
-    <app-footer></app-footer>
+      <app-header></app-header>
+      <main class="min-h-main max-w-full-hd h-0 m-auto px-8">
+          <router-outlet></router-outlet>
+      </main>
+      <app-footer></app-footer>
   `,
   imports: [
     HeaderComponent,

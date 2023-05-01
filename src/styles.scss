@@ -38,9 +38,47 @@ $bead-fe-theme: mat.define-light-theme((
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
 
-* {
-  box-sizing: border-box;
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  overflow: overlay;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3f3232;
+  border-radius: 12px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #413d3d;
+}
+
+.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline__notch {
+  border-right-style: hidden;
+}
+
+.mdc-text-field__input::-webkit-calendar-picker-indicator {
+  display: block !important;
+  font-size: 24px;
+}
+
+.time-select .mdc-list-item__primary-text {
+  margin-inline: auto !important;
+}
+
+.eatery-option .mdc-list-item__primary-text {
+  width: max-content;
 }

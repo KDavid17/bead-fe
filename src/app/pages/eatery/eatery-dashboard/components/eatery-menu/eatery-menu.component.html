@@ -1,0 +1,35 @@
+<mat-card *ngIf="eateries; else loadingEateries" class="h-80 overflow-y-auto">
+  <div>
+    <mat-form-field appearance="outline" class="w-1/4">
+      <mat-label>Choose an eatery</mat-label>
+      <input type="text"
+             placeholder="Choose an eatery"
+             matInput
+             [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayEateryName"
+                        (optionSelected)="onSelectionChange($event)">
+        <mat-option *ngFor="let option of eateries" [value]="option.id">
+          {{option.name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <button type="button" mat-button>
+      <span>Add Food</span>
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
+  <ng-container *ngIf="foodsDetails$; else noEaterySelected">
+    <app-eatery-foods *ngIf="{ foodsDetails: foodsDetails$ | async } as vm"
+                      [foodsDetails]="vm.foodsDetails"></app-eatery-foods>
+  </ng-container>
+</mat-card>
+
+<ng-template #loadingEateries>
+  <span>Loading eateries...</span>
+</ng-template>
+
+<ng-template #noEaterySelected>
+  <span class="text-center">No eatery selected</span>
+</ng-template>

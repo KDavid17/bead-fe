@@ -1,0 +1,64 @@
+<div class="h-full pt-8">
+  <form class="flex flex-col items-center gap-y-4 shadow-md" [formGroup]="bookingForm" (submit)="onSubmit()">
+    <mat-form-field appearance="outline" class="w-1/4">
+      <mat-label>Choose an eatery</mat-label>
+      <input matInput type="text" [formControl]="eaterySearch" [matAutocomplete]="auto">
+      <button type="button" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilteredOptions()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayEateryName"
+                        (optionSelected)="onSelectionChange($event)" class="flex">
+        <mat-option class="overflow-visible eatery-option" *ngFor="let option of filteredOptions | async"
+                    [value]="option">
+          <img
+            ngSrc="https://static.wixstatic.com/media/13e881_1d7d11086bcd4f4cb43322681a5ea969~mv2.png/v1/fill/w_1903,h_1219,al_c,q_95,usm_0.66_1.00_0.01,enc_auto/IMG_9495_webp.png"
+            height="100" width="200" priority>
+          <span>{{option.name}}</span>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-1/4">
+      <mat-label>Choose a date</mat-label>
+      <input matInput [matDatepicker]="picker">
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <div class="w-1/4 flex justify-between">
+      <mat-form-field appearance="outline">
+        <mat-label>Choose arrival time</mat-label>
+        <mat-select [(value)]="selected" (openedChange)="scrollIntoView('arrive')">
+          <mat-select-trigger>
+            {{selected}}:00
+          </mat-select-trigger>
+          <ng-container *ngFor="let item of [].constructor(24); let i = index">
+            <mat-option [id]="i + '-arrive'" class="time-select" [attr.id]="i + ':00'" [value]="i">{{i}}:00</mat-option>
+            <mat-option [id]="i + '-arrive'" class="time-select" [value]="i">{{i}}:15</mat-option>
+            <mat-option [id]="i + '-arrive'" class="time-select" [value]="i">{{i}}:30</mat-option>
+            <mat-option [id]="i + '-arrive'" class="time-select" [value]="i">{{i}}:45</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Choose leaving time</mat-label>
+        <mat-select [(value)]="selected" (openedChange)="scrollIntoView('leave')">
+          <mat-select-trigger>
+            {{selected}}:00
+          </mat-select-trigger>
+          <ng-container *ngFor="let item of [].constructor(24); let i = index">
+            <mat-option [id]="i + '-leave'" class="time-select" [attr.id]="i + ':00'" [value]="i">{{i}}:00</mat-option>
+            <mat-option [id]="i + '-leave'" class="time-select" [value]="i">{{i}}:15</mat-option>
+            <mat-option [id]="i + '-leave'" class="time-select" [value]="i">{{i}}:30</mat-option>
+            <mat-option [id]="i + '-leave'" class="time-select" [value]="i">{{i}}:45</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <button mat-button>
+      Submit
+    </button>
+  </form>
+</div>

@@ -1,0 +1,10 @@
+<div class="text-white">
+  <button matSnackBarAction (click)="snackBarRef.dismissWithAction()"
+          class="relative float-right -top-2.5 -right-2.5 flex justify-center">
+    <mat-icon class="opacity-30 text-lg hover:bg-gray-200 hover:rounded-lg">
+      close
+    </mat-icon>
+  </button>
+  <h1 class="items-center">{{ data.type }}</h1>
+  <p class="whitespace-pre-line">{{ data.message }}</p>
+</div>

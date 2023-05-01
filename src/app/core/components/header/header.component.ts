@@ -1,18 +1,26 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { RouterLink } from "@angular/router";
 
 import { MatIconModule } from "@angular/material/icon";
-import { MatToolbarModule } from "@angular/material/toolbar";
+
+import { AuthenticationService } from "../../services/authentication/authentication.service";
+import { MatMenuModule } from "@angular/material/menu";
 
 @Component({
   standalone: true,
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
+  imports: [CommonModule, MatIconModule, RouterLink, MatMenuModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, MatIconModule, MatToolbarModule, RouterLink]
 })
 export class HeaderComponent {
+  private readonly authenticationService = inject(AuthenticationService);
 
+  userInfo$ = this.authenticationService.getUserInfo();
+
+  logout(): void {
+    this.authenticationService.logout();
+  }
 }

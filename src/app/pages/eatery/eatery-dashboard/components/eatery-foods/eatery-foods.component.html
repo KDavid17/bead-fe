@@ -1,0 +1,44 @@
+<mat-accordion *ngIf="foodsDetails; else loadingFoodsDetails" displayMode="flat">
+  <mat-expansion-panel *ngFor="let foodDetails of foodsDetails">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{foodDetails.name}}
+      </mat-panel-title>
+
+      <mat-panel-description class="invisible md:visible">
+         {{foodDetails.price}} $
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <ng-container *ngIf="foodDetails.ingredients.length > 0; else noIngredients">
+      <div class="flex justify-evenly">
+        <div class="w-2/5">
+          <img class="rounded-md mat-elevation-z2" ngSrc="https://groundbeefrecipes.com/wp-content/uploads/double-bacon-cheeseburger-recipe-6-500x500.jpg" height="100" width="200" priority>
+        </div>
+
+        <div class="flex flex-col w-3/5 items-center justify-between">
+          <div class="flex flex-col">
+            <span class="text-center font-semibold italic text-lg">Ingredients</span>
+
+            <div class="flex flex-wrap h-min pt-2">
+              <span class="px-1 mx-1 border-x-2 rounded-md" *ngFor="let ingredient of foodDetails.ingredients">{{ingredient.name}}</span>
+            </div>
+          </div>
+
+          <div class="self-end">
+            <button class="mx-1 mat-elevation-z3" mat-button>Edit Food</button>
+            <button class="mx-1 mat-elevation-z3" mat-button>Delete Food</button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<ng-template #loadingFoodsDetails>
+  Loading foods details...
+</ng-template>
+
+<ng-template #noIngredients>
+  <span>No available ingredients.</span>
+</ng-template>

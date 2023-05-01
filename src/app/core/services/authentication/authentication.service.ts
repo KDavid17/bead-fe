@@ -1,58 +1,145 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { inject, Injectable } from "@angular/core";
+import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { catchError } from "rxjs";
 
 import { environment } from "../../../../environments/environment";
 
-import { ILoginRequest } from "../../models/requests/ILoginRequest";
+import { AlertService } from "../alert/alert.service";
+import LoginRequestModel from "../../../shared/models/requests/login-request.model";
+import LoginResponseModel from "../../../shared/models/responses/login-response.model";
+import { BehaviorSubject, Observable } from "rxjs";
+import UserInfoModel from "../../../shared/models/entities/user-info.model";
+import DecodedTokenModel from "../../../shared/models/entities/decoded-token.model";
+import { AlertTypes } from "../../utils/alert-types";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
+  private readonly alertService = inject(AlertService);
+  private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
+
   private readonly authApi = `${environment.apiUrl}/authentication`;
   private readonly httpOptions = {
-    headers: new HttpHeaders({ "Content-Type": "application/json" }),
+    headers: new HttpHeaders({
+      "Content-Type": "application/json",
+    }),
   };
-  private readonly tokenKey = "Token";
+  private readonly tokenKey = "BeadToken";
+  private readonly userInfoSubject = new BehaviorSubject<UserInfoModel>(this.getUserLoggedIn());
 
-  constructor(private readonly http: HttpClient, private readonly router: Router) { }
-
-  login(request: ILoginRequest): any {
-    this.http.post(`${this.authApi}/login`, request, this.httpOptions)
+  getUserInfo(): Observable<UserInfoModel | undefined> {
+    return this.userInfoSubject.asObservable();
   }
-  //
-  // register(user: UserRegisterModel): Observable<UserRegisterResponseModel> {
-  //   return this.http.post<UserRegisterResponseModel>(
-  //     `${this.authApi}/register`,
-  //     user,
-  //     this.httpOptions,
-  //   );
-  // }
 
-  clearStorage(): void {
+  login(request: LoginRequestModel): any {
+    this.http.post<LoginResponseModel>(`${this.authApi}/login`, request, this.httpOptions).subscribe({
+      next: (response: LoginResponseModel) => {
+        this.saveToken(response.token);
+
+        this.alertService.handleMessage(AlertTypes.Success, "You have successfully logged in!");
+
+        const role: string = this.userInfoSubject.getValue().role.toLowerCase();
+
+        this.router.navigate([`${role}-dashboard`]);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.alertService.handleErrorResponse(error);
+      }
+    });
+  }
+
+  logout(): void {
     localStorage.clear();
+
+    this.userInfoSubject.next({} as UserInfoModel);
+
+    this.router.navigate(['/login']);
   }
 
-  saveToken(token: string): void {
-    localStorage.removeItem(this.tokenKey);
-    localStorage.setItem(this.tokenKey, token);
+  logoutUnauthorized(): void {
+    this.alertService.handleMessage(AlertTypes.Error, "You are not allowed to view that page!");
+
+    this.logout();
+  }
+
+  register(): any {
+    this.http.get('https://localhost:44336/api/foods', this.httpOptions).subscribe({
+      next: (r) => {
+        console.log(r);
+        this.alertService.handleMessage(AlertTypes.Success, "You have successfully made the call!");
+      },
+      error: (error: HttpErrorResponse) => {
+        this.alertService.handleErrorResponse(error);
+      }
+    });
   }
 
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
   }
 
-  isLoggedIn(): boolean {
-    const user = localStorage.getItem(this.tokenKey);
+  hasValidToken(): boolean {
+    const userInfo: UserInfoModel = this.userInfoSubject.getValue();
 
-    return user && user.length > 0 ? true : false;
+    if (!userInfo.exp) {
+      this.alertService.handleMessage(AlertTypes.Error, "Your are not authorized to view this resource!");
+      this.logout();
+
+      return false;
+    }
+
+    if ((Math.floor((new Date).getTime() / 1000)) >= userInfo.exp) {
+      this.alertService.handleMessage(AlertTypes.Warning, "Your token has expired. Please login again!");
+      this.logout();
+
+      return false;
+    }
+
+    return true;
   }
 
-  logout(): void {
-    localStorage.clear();
+  getUserLoggedIn(): UserInfoModel {
+    const token = localStorage.getItem(this.tokenKey);
 
-    this.router.navigate(['/dashboard']);
+    if (token && token.length > 0) {
+      const decodedToken = this.decodeToken(token);
+
+      if (decodedToken) {
+        return ({
+          exp: decodedToken.exp,
+          role: decodedToken.role,
+          sub: decodedToken.sub
+        })
+      }
+
+      localStorage.clear();
+
+      return {} as UserInfoModel;
+    }
+
+    return {} as UserInfoModel;
+  }
+
+  private decodeToken(token: string): DecodedTokenModel | undefined {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/').replace(/\s/g, '');
+      const parsed: DecodedTokenModel = (JSON.parse(decodeURIComponent(window.atob(base64))));
+
+      return parsed;
+    } catch {
+      this.alertService.handleMessage(AlertTypes.Error, "Invalid token!");
+
+      return;
+    }
+  }
+
+  private saveToken(token: string): void {
+    localStorage.clear();
+    localStorage.setItem(this.tokenKey, token);
+
+    this.userInfoSubject.next(this.getUserLoggedIn());
   }
 }
