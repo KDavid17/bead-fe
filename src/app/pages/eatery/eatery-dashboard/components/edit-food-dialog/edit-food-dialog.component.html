@@ -1,0 +1,50 @@
+<form class="food-dialog p-6 w-full text-center" [formGroup]="editFoodForm" (ngSubmit)="onSubmit()">
+  <h1 class="text-4xl text-accent border-b-2 border-gray-300">Fill in the form</h1>
+
+  <div class="flex flex-col my-4">
+    <div>
+      <h2 class="italic text-2xl">Eatery</h2>
+
+      <mat-form-field appearance="outline">
+        <input matInput disabled [value]="data.eatery?.name">
+      </mat-form-field>
+    </div>
+
+    <div>
+      <h2 class="italic text-2xl">Food Name</h2>
+
+      <mat-form-field appearance="outline">
+        <input matInput formControlName="name">
+      </mat-form-field>
+    </div>
+
+    <div>
+      <h2 class="italic text-2xl">Food Price</h2>
+
+      <mat-form-field appearance="outline">
+        <input matInput type="number" placeholder="0" class="text-right" formControlName="price">
+
+        <span matTextPrefix>$&nbsp;</span>
+
+        <span matTextSuffix>.00</span>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <h2 class="italic text-2xl">Ingredients</h2>
+
+      <mat-checkbox [class.red-label]="ingredient.isAllergen" *ngFor="let ingredient of ingredients$ | async"
+                    (change)="onCheckboxChange(ingredient)" [checked]="ingredient.isChecked">
+        {{ingredient.name}}
+      </mat-checkbox>
+    </div>
+  </div>
+
+  <div mat-dialog-actions class="grid grid-cols-2 justify-center">
+    <button class="bg-accent text-white" type="submit" mat-button cdkFocusInitial>
+      Update Food
+    </button>
+
+    <button class="bg-secondary text-white" type="button" mat-button mat-dialog-close>Cancel</button>
+  </div>
+</form>

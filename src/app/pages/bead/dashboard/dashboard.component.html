@@ -1,3 +1,31 @@
-<div>
-  Bead description, button to reservation page and maybe a carousel
+<div class="flex flex-col h-full justify-center mx-auto max-w-4xl text-center text-white">
+  <mat-card class="h-dashboard-clamp overflow-y-auto mt-8 p-4 text-center text-black sm:text-2xl
+      text-sm font-mono">
+    <img ngSrc="assets/png/large-logo.png" height=100 width=256 class="mx-auto">
+
+    <p class="first-letter:text-5xl first-letter:text-accent first-letter:font-bold border-t-2 border-gray-200 pt-2">
+      Welcome to our eatery reservation website, where convenience meets culinary delight. Discover a seamless and
+      effortless way to book your favorite dining experiences.
+    </p>
+
+    <p class="first-letter:text-5xl first-letter:text-accent first-letter:font-bold">
+      Browse through a wide selection of restaurants, ranging from cozy cafes to upscale eateries, and book your table
+      with just a few clicks.
+    </p>
+
+    <p class="first-letter:text-5xl first-letter:text-accent first-letter:font-bold">
+      Whether you're planning a romantic dinner, a family gathering, or a business lunch, our platform offers a
+      hassle-free reservation process, ensuring you never miss out on a memorable dining experience.
+    </p>
+
+    <p class="first-letter:text-5xl first-letter:text-accent first-letter:font-bold">
+      Join us and embark on a culinary journey filled with delectable flavors and unforgettable moments!
+    </p>
+  </mat-card>
+
+  <div class="flex sm:justify-between max-sm:flex-col sm:text-4xl text-lg text-accent font-math">
+    <a routerLink="/book" class="rounded-md bg-secondary p-2 m-2">Book a table</a>
+
+    <a routerLink="/eateries" class="rounded-md bg-secondary p-2 m-2">View eateries</a>
+  </div>
 </div>

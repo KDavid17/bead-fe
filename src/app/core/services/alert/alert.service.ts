@@ -31,6 +31,14 @@ export class AlertService {
     }
   }
 
+  handleErrorMessage(message: string = "") {
+    if (message && message.length > 0) {
+      this.openSnackBar(AlertTypes.Error, message);
+    } else {
+      this.openSnackBar(AlertTypes.Error, "Operation could not be completed due to an error!")
+    }
+  }
+
   handleErrorResponse(error: HttpErrorResponse): void {
     if (error.error.errors) {
       const errors = error.error.errors;

@@ -45,10 +45,14 @@ html, body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  overflow: overlay;
+}
+
+.multiline-tooltip {
+  white-space: pre-line;
 }
 
 ::-webkit-scrollbar {
+  background-color: transparent;
   width: 8px;
 }
 
@@ -81,4 +85,23 @@ body {
 
 .eatery-option .mdc-list-item__primary-text {
   width: max-content;
+}
+
+.food-dialog {
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+  }
+
+  input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+  }
+}
+
+.red-label {
+  label {
+    color: red;
+  }
 }

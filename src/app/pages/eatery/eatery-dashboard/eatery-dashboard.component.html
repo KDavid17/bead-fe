@@ -1,11 +1,8 @@
-<div class="flex flex-col h-full pt-8">
-  <div class="flex justify-between">
-    <app-eatery-profile *ngIf="{ userProfile: userProfile$ | async } as vm"
-                        [userProfile]="vm.userProfile" class="flex justify-center w-1/2"></app-eatery-profile>
+<div class="flex flex-col items-center justify-center h-full mx-auto max-w-4xl">
+  <app-eatery-profile *ngIf="{ userProfile: userProfile$ | async } as vm" [userProfile]="vm.userProfile"
+                      class="w-full"></app-eatery-profile>
 
-    <app-eatery-menu *ngIf="{ eateries: eateries$ | async } as vm" [eateries]="vm.eateries"
-                     class="w-1/2"></app-eatery-menu>
-  </div>
-
-  <app-eatery-layout></app-eatery-layout>
+  <app-eatery-menu *ngIf="{ eateries: eateries$ | async } as vm" [eateries]="vm.eateries"
+                   [currentEatery]="currentEatery" (getEateriesOfUser)="getEateriesOfUser($event)"
+                   class="w-full"></app-eatery-menu>
 </div>

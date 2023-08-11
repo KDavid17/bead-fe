@@ -26,8 +26,9 @@
           </div>
 
           <div class="self-end">
-            <button class="mx-1 mat-elevation-z3" mat-button>Edit Food</button>
-            <button class="mx-1 mat-elevation-z3" mat-button>Delete Food</button>
+            <button class="mx-1 mat-elevation-z3" mat-button (click)="openEditFoodDialog(foodDetails)">Edit Food</button>
+
+            <button class="mx-1 mat-elevation-z3" mat-button (click)="deleteFood(foodDetails.id)">Delete Food</button>
           </div>
         </div>
       </div>

@@ -16,6 +16,10 @@ export class EateryService {
     "Content-Type": "application/json",
   });
 
+  getEateryById(id: number): Observable<EateryResponseModel> {
+    return this.http.get<EateryResponseModel>(`${this.eateryApi}/${id}`, {headers: this.headers});
+  }
+
   getEateriesByUserId(): Observable<EateryResponseModel[]> {
     return this.http.get<EateryResponseModel[]>(`${this.eateryApi}/user`, {headers: this.headers});
   }

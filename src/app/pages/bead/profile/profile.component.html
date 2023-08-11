@@ -1,0 +1,61 @@
+<div class="flex flex-col justify-center h-full mx-auto max-w-4xl">
+  <mat-card *ngIf="userProfile$ | async as userProfile" class="max-h-96 items-center my-8 h-dashboard-clamp overflow-y-auto mt-8 p-4">
+    <h1 class="text-2xl text-center my-4 w-heading-clamp border-b-2 border-gray-300">Welcome, {{userProfile.firstName}}!</h1>
+
+    <div>
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>First Name</mat-label>
+
+        <input matInput disabled [value]="userProfile.firstName">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Last Name</mat-label>
+
+        <input matInput disabled [value]="userProfile.lastName">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Email</mat-label>
+
+        <input matInput disabled [value]="userProfile.email">
+      </mat-form-field>
+    </div>
+  </mat-card>
+
+  <mat-card class="max-h-96 items-center h-full my-8">
+    <h1 class="text-2xl text-center my-4 w-heading-clamp border-b-2 border-gray-300">My bookings</h1>
+
+    <mat-accordion class="w-full max-w-3xl overflow-y-auto">
+      <mat-expansion-panel *ngFor="let booking of bookings$ | async">
+        <mat-expansion-panel-header class="h-auto my-2">
+          <mat-panel-title>
+            {{booking.eateryName}}
+          </mat-panel-title>
+
+          <mat-panel-description class="justify-center">
+            {{booking.startDate | date:'short'}} - {{booking.endDate | date:'short'}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="flex flex-wrap justify-center gap-4">
+          <mat-card *ngFor="let food of booking.foods" class="text-center h-card-clamp">
+            <img matTooltipClass="multiline-tooltip" [matTooltip]="getIngredients(food.ingredients)"
+                 matTooltipPosition="above"
+                 class="rounded-md mat-elevation-z2"
+                 ngSrc="https://groundbeefrecipes.com/wp-content/uploads/double-bacon-cheeseburger-recipe-6-500x500.jpg"
+                 height="100" width="200" priority>
+
+            <span>{{food.name}}</span>
+
+            <span class="font-bold">Quantity: {{food.price}}$</span>
+
+            <div class="flex mx-auto">
+              <input class="w-16 text-center" matInput readonly [value]="(food.quantity ?? 0).toString()">
+            </div>
+          </mat-card>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-card>
+</div>

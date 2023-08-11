@@ -11,6 +11,7 @@ import { BehaviorSubject, Observable } from "rxjs";
 import UserInfoModel from "../../../shared/models/entities/user-info.model";
 import DecodedTokenModel from "../../../shared/models/entities/decoded-token.model";
 import { AlertTypes } from "../../utils/alert-types";
+import RegisterRequestModel from "../../../shared/models/requests/register-request.model";
 
 @Injectable({
   providedIn: 'root'
@@ -41,8 +42,21 @@ export class AuthenticationService {
         this.alertService.handleMessage(AlertTypes.Success, "You have successfully logged in!");
 
         const role: string = this.userInfoSubject.getValue().role.toLowerCase();
-
+        console.log(role);
         this.router.navigate([`${role}-dashboard`]);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.alertService.handleErrorResponse(error);
+      }
+    });
+  }
+
+  register(request: RegisterRequestModel): any {
+    this.http.post(`${this.authApi}/register`, request, this.httpOptions).subscribe({
+      next: () => {
+        this.alertService.handleMessage(AlertTypes.Success, "You have successfully registered your account!");
+
+        this.router.navigate(['login']);
       },
       error: (error: HttpErrorResponse) => {
         this.alertService.handleErrorResponse(error);
@@ -64,18 +78,6 @@ export class AuthenticationService {
     this.logout();
   }
 
-  register(): any {
-    this.http.get('https://localhost:44336/api/foods', this.httpOptions).subscribe({
-      next: (r) => {
-        console.log(r);
-        this.alertService.handleMessage(AlertTypes.Success, "You have successfully made the call!");
-      },
-      error: (error: HttpErrorResponse) => {
-        this.alertService.handleErrorResponse(error);
-      }
-    });
-  }
-
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
   }
@@ -84,7 +86,7 @@ export class AuthenticationService {
     const userInfo: UserInfoModel = this.userInfoSubject.getValue();
 
     if (!userInfo.exp) {
-      this.alertService.handleMessage(AlertTypes.Error, "Your are not authorized to view this resource!");
+      //this.alertService.handleMessage(AlertTypes.Error, "Your are not authorized to view this resource!");
       this.logout();
 
       return false;
@@ -109,7 +111,7 @@ export class AuthenticationService {
       if (decodedToken) {
         return ({
           exp: decodedToken.exp,
-          role: decodedToken.role,
+          role: decodedToken.role.toLowerCase(),
           sub: decodedToken.sub
         })
       }

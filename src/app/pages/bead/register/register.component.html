@@ -1,1 +1,105 @@
-<p>register works!</p>
+<div class="authentication-background h-full flex">
+  <form
+    [formGroup]="registerForm"
+    (submit)="onSubmit()"
+    class="flex flex-col w-full max-w-xs gap-4 m-auto sm:mr-32 p-4 bg-white rounded-md shadow-md drop-shadow-lg"
+  >
+    <img ngSrc="assets/png/large-logo.png" height=100 width=256 class="mx-auto">
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>First Name</mat-label>
+
+      <input
+        matInput
+        type="text"
+        formControlName="firstName"
+        placeholder="Your first name"
+        name="firstName"
+      />
+
+      <mat-error *ngIf="registerForm.controls.firstName.invalid && registerForm.controls.firstName.errors">
+        <span *ngIf="registerForm.controls.firstName.errors['required']">Field required!</span>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Last Name</mat-label>
+
+      <input
+        matInput
+        type="text"
+        formControlName="lastName"
+        placeholder="Your last name"
+        name="lastName"
+      />
+
+      <mat-error *ngIf="registerForm.controls.lastName.invalid && registerForm.controls.lastName.errors">
+        <span *ngIf="registerForm.controls.lastName.errors['required']">Field required!</span>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Email</mat-label>
+
+      <input
+        matInput
+        type="text"
+        formControlName="email"
+        placeholder="Your email"
+        name="email"
+      />
+
+      <mat-error *ngIf="registerForm.controls.email.invalid && registerForm.controls.email.errors">
+        <span *ngIf="registerForm.controls.email.errors['required']">Field required!</span>
+
+        <span *ngIf="registerForm.controls.email.errors['email']">Invalid email!</span>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Enter your password</mat-label>
+
+      <input formControlName="password" name="password" matInput [type]="hide ? 'password' : 'text'">
+
+      <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+
+      <mat-error class="text-justify w-[290px] text-[11px] -translate-x-5" *ngIf="registerForm.controls.password.invalid &&
+            registerForm.controls.password.errors">
+        <span class="ml-4" *ngIf="registerForm.controls.password.errors['required']">Field required!</span>
+
+        <span *ngIf="registerForm.controls.password.errors['pattern']">
+              Password must be at least 8 characters long, include 1 upper case,
+              1 lower case and 1 number or special character
+            </span>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Confirm your password</mat-label>
+
+      <input formControlName="confirmPassword" name="confirmPassword" matInput [type]="hide ? 'password' : 'text'">
+
+      <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+
+      <mat-error *ngIf="registerForm.controls.confirmPassword.invalid && registerForm.controls.confirmPassword.errors">
+        <span *ngIf="registerForm.controls.confirmPassword.errors['required']">Field required! </span>
+
+        <span *ngIf="registerForm.controls.confirmPassword.errors['passwordMismatch']">
+              {{registerForm.controls.confirmPassword.errors['passwordMismatch']}}
+        </span>
+      </mat-error>
+    </mat-form-field>
+
+    <button class="bg-slate-400 text-white" type="submit" mat-button>Register</button>
+
+    <p class="text-center">Already have an account?
+      <a class="text-slate-400 hover:underline" type="button" routerLink="/login">Login</a>
+    </p>
+  </form>
+</div>

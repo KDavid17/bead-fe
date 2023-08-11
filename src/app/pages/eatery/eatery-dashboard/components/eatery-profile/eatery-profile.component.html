@@ -1,5 +1,6 @@
-<mat-card *ngIf="userProfile; else loadingUserProfile" class="justify-between px-8 w-1/2">
-  <h1 class="text-2xl mt-4">Welcome, {{userProfile.firstName}}!</h1>
+<mat-card *ngIf="userProfile; else loadingUserProfile" class="h-dashboard-clamp max-h-96 items-center my-8 p-4
+  overflow-y-auto">
+  <h1 class="text-2xl text-center my-4 w-heading-clamp border-b-2 border-gray-300">Welcome, {{userProfile.firstName}}!</h1>
 
   <div>
     <mat-form-field appearance="outline" class="w-full">

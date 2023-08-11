@@ -1,25 +1,32 @@
-<header *ngIf="userInfo$ | async as userInfo" class="px-8 h-16 bg-slate-500">
-  <button mat-icon-button class="sm:hidden hover:bg-gray-500">
+<header *ngIf="userInfo$ | async as userInfo" class="grid grid-cols-3 items-center px-8 h-16 bg-accent text-white">
+  <button mat-icon-button [matMenuTriggerFor]="navMenu" *ngIf="userInfo.role === 'user'"
+          class="sm:hidden hover:bg-gray-500 justify-self-start">
     <mat-icon>menu</mat-icon>
   </button>
 
-  <span>Logo</span>
+  <div class="max-sm:hidden font-math text-lg" *ngIf="userInfo.role === 'user'">
+    <a mat-button class="ml-3 text-white" [routerLink]="['book']">Book a Table</a>
 
-  <a mat-button class="ml-3" [routerLink]="['']">Home</a>
-  <a mat-button class="ml-3" [routerLink]="['login']">Login</a>
-  <a mat-button class="ml-3" [routerLink]="['register']">Register</a>
-  <a mat-button class="ml-3" [routerLink]="['book']">Book</a>
+    <a mat-button class="ml-3 text-white" [routerLink]="['eateries']">Eateries</a>
+  </div>
 
-  <span *ngIf="!userInfo.role">undefined</span>
-  <span *ngIf="userInfo.role === 'User'">Role1</span>
-  <span *ngIf="userInfo.role === 'Eatery'">Role2</span>
+  <div *ngIf="userInfo.role !== 'user'"></div>
 
-  <button mat-icon-button [matMenuTriggerFor]="menu" class="h-full float-right">
+  <img [routerLink]="[userInfo.role + '-dashboard']" ngSrc="assets/png/small-logo.png" height=64 width=64
+       class="inline hover:cursor-pointer justify-self-center">
+
+  <button mat-icon-button [matMenuTriggerFor]="profileMenu" class="h-full justify-self-end">
     <mat-icon class="h-full flex items-center text-3xl w-8">account_circle</mat-icon>
   </button>
 
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item [routerLink]="['/profile']">
+  <mat-menu #navMenu="matMenu">
+    <button mat-menu-item [routerLink]="['book']">Book a Table</button>
+
+    <button mat-menu-item [routerLink]="['eateries']">Eateries</button>
+  </mat-menu>
+
+  <mat-menu #profileMenu="matMenu">
+    <button *ngIf="userInfo.role === 'user'" mat-menu-item [routerLink]="['/profile']">
       <mat-icon>person</mat-icon>
       <span>Profile</span>
     </button>

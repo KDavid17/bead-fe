@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
 import { Observable } from "rxjs";
 import UserResponseModel from "../../shared/models/responses/user-response.model";
+import AdminUserResponseModel from "../../shared/models/responses/admin-user-response.model";
 
 @Injectable({
   providedIn: 'root'
@@ -17,5 +18,9 @@ export class UserService {
 
   getUserProfile(): Observable<UserResponseModel> {
     return this.http.get<UserResponseModel>(`${this.usersApi}/profile`, {headers: this.headers});
+  }
+
+  getUsers(): Observable<AdminUserResponseModel[]> {
+    return this.http.get<AdminUserResponseModel[]>(`${this.usersApi}`, {headers: this.headers});
   }
 }

@@ -13,9 +13,39 @@ export const routes: Route[] = [
     canActivate: [canActivateAny]
   },
   {
+    path: "terms-and-conditions",
+    loadComponent: () =>
+      import("../../../pages/bead/terms-and-conditions/terms-and-conditions.component").then((m) => m.TermsAndConditionsComponent),
+    canActivate: [canActivateAny],
+  },
+  {
+    path: "about",
+    loadComponent: () =>
+      import("../../../pages/bead/about/about.component").then((m) => m.AboutComponent),
+    canActivate: [canActivateAny],
+  },
+  {
+    path: "eateries",
+    loadComponent: () =>
+      import("../../../pages/bead/eateries/eateries.component").then((m) => m.EateriesComponent),
+    canActivate: [canActivateUser],
+  },
+  {
+    path: "eateries/:eateryId",
+    loadComponent: () =>
+      import("../../../pages/bead/eatery/eatery.component").then((m) => m.EateryComponent),
+    canActivate: [canActivateUser]
+  },
+  {
     path: "dashboard",
     loadComponent: () =>
       import("../../../pages/bead/dashboard/dashboard.component").then((m) => m.DashboardComponent),
+    canActivate: [canActivateUser],
+  },
+  {
+    path: "profile",
+    loadComponent: () =>
+      import("../../../pages/bead/profile/profile.component").then((m) => m.ProfileComponent),
     canActivate: [canActivateUser],
   },
   {
@@ -34,6 +64,7 @@ export const routes: Route[] = [
     path: "book",
     loadComponent: () =>
       import("../../../pages/bead/book/book.component").then((m) => m.BookComponent),
+    canActivate: [canActivateUser],
   },
   {
     path: "user-dashboard",
@@ -43,7 +74,7 @@ export const routes: Route[] = [
   {
     path: "",
     pathMatch: "full",
-    redirectTo: "/not-found"
+    redirectTo: `/login`
   },
   {
     path: "**",

@@ -1,5 +1,5 @@
 export const enum RoleTypes {
-  User = "User",
-  Eatery = "Eatery",
-  Admin = "Admin",
+  User = "user",
+  Eatery = "eatery",
+  Admin = "admin",
 }

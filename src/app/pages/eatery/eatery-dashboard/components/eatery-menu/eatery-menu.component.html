@@ -1,28 +1,35 @@
-<mat-card *ngIf="eateries; else loadingEateries" class="h-80 overflow-y-auto">
-  <div>
-    <mat-form-field appearance="outline" class="w-1/4">
-      <mat-label>Choose an eatery</mat-label>
+<mat-card *ngIf="eateries; else loadingEateries" class="h-full min-h-[360px] max-h-96 items-center my-8 p-4
+  overflow-y-auto">
+  <span class="font-math text-secondary text-center text-6xl italic">Menu</span>
+
+  <div class="w-full">
+    <mat-form-field appearance="outline">
+      <mat-label>Search eatery</mat-label>
+
       <input type="text"
-             placeholder="Choose an eatery"
+             placeholder="Search eatery"
              matInput
+             [formControl]="searchForm"
              [matAutocomplete]="auto">
+
       <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayEateryName"
                         (optionSelected)="onSelectionChange($event)">
-        <mat-option *ngFor="let option of eateries" [value]="option.id">
+        <mat-option *ngFor="let option of eateries" [value]="option">
           {{option.name}}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
 
-    <button type="button" mat-button>
+    <button *ngIf="selectedEatery" type="button" mat-button class="float-right" (click)="openAddFoodDialog()">
       <span>Add Food</span>
+
       <mat-icon>add</mat-icon>
     </button>
   </div>
 
   <ng-container *ngIf="foodsDetails$; else noEaterySelected">
-    <app-eatery-foods *ngIf="{ foodsDetails: foodsDetails$ | async } as vm"
-                      [foodsDetails]="vm.foodsDetails"></app-eatery-foods>
+    <app-eatery-foods *ngIf="{ foodsDetails: foodsDetails$ | async } as vm" (emitCurrentEatery)="emitCurrentEatery()"
+                      [foodsDetails]="vm.foodsDetails" [eatery]="selectedEatery" class="w-full"></app-eatery-foods>
   </ng-container>
 </mat-card>
 

@@ -1,0 +1,23 @@
+<div class="flex h-full max-w-4xl items-center justify-center mx-auto">
+  <mat-card class="h-eateries-clamp grid-rows-min-content grid lg:grid-cols-3 grid-cols-1 sm:px-8 px-2 py-2 gap-3
+  justify-items-center overflow-y-auto w-full">
+    <mat-form-field appearance="outline" class="lg:col-span-3 mt-4">
+      <mat-label>Search eatery</mat-label>
+
+      <input matInput [formControl]="eaterySearch">
+
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-card *ngFor="let eatery of eateries$ | async"
+              class="flex flex-col items-center pb-2 max-sm:gap-2 w-full max-w-xs max-h-[270px]">
+      <img
+        ngSrc="https://static.wixstatic.com/media/13e881_1d7d11086bcd4f4cb43322681a5ea969~mv2.png/v1/fill/w_1903,h_1219,al_c,q_95,usm_0.66_1.00_0.01,enc_auto/IMG_9495_webp.png"
+        width="320" height="160" class="mb-2">
+
+      <span class="italic mb-2">{{eatery.name}}</span>
+
+      <a mat-button type="button" [routerLink]="[eatery.id]" class="bg-slate-400">View Details</a>
+    </mat-card>
+  </mat-card>
+</div>

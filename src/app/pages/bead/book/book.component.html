@@ -1,11 +1,21 @@
-<div class="h-full pt-8">
-  <form class="flex flex-col items-center gap-y-4 shadow-md" [formGroup]="bookingForm" (submit)="onSubmit()">
-    <mat-form-field appearance="outline" class="w-1/4">
-      <mat-label>Choose an eatery</mat-label>
+<form class="flex flex-col h-full justify-center mx-auto max-w-4xl text-center gap-y-4 shadow-md"
+      [formGroup]="bookingForm" (submit)="onSubmit()">
+  <mat-card class="h-dashboard-clamp overflow-y-auto mt-8 p-4 text-center">
+    <img ngSrc="assets/png/large-logo.png" height=100 width=256 class="mx-auto">
+
+    <p class="text-5xl text-accent font-bold border-t-2 border-gray-200 pt-2 my-4">
+      Book a table
+    </p>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Search an eatery</mat-label>
+
       <input matInput type="text" [formControl]="eaterySearch" [matAutocomplete]="auto">
+
       <button type="button" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilteredOptions()">
         <mat-icon>close</mat-icon>
       </button>
+
       <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayEateryName"
                         (optionSelected)="onSelectionChange($event)" class="flex">
         <mat-option class="overflow-visible eatery-option" *ngFor="let option of filteredOptions | async"
@@ -13,52 +23,105 @@
           <img
             ngSrc="https://static.wixstatic.com/media/13e881_1d7d11086bcd4f4cb43322681a5ea969~mv2.png/v1/fill/w_1903,h_1219,al_c,q_95,usm_0.66_1.00_0.01,enc_auto/IMG_9495_webp.png"
             height="100" width="200" priority>
+
           <span>{{option.name}}</span>
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="w-1/4">
-      <mat-label>Choose a date</mat-label>
-      <input matInput [matDatepicker]="picker">
+    <mat-form-field appearance="outline">
+      <mat-label>Date</mat-label>
+
+      <input matInput [matDatepicker]="picker" formControlName="date">
+
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
-    <div class="w-1/4 flex justify-between">
+    <div class="flex justify-between">
       <mat-form-field appearance="outline">
-        <mat-label>Choose arrival time</mat-label>
-        <mat-select [(value)]="selected" (openedChange)="scrollIntoView('arrive')">
+        <mat-label>Arrival Time</mat-label>
+
+        <mat-select (valueChange)="bookingForm.controls.arrivalTime.setValue($event)" (openedChange)="scrollIntoView('arrive')"
+                    formControlName="arrivalTime">
           <mat-select-trigger>
-            {{selected}}:00
+            {{bookingForm.controls.arrivalTime.value}}
           </mat-select-trigger>
+
           <ng-container *ngFor="let item of [].constructor(24); let i = index">
-            <mat-option [id]="i + '-arrive'" class="time-select" [attr.id]="i + ':00'" [value]="i">{{i}}:00</mat-option>
-            <mat-option [id]="i + '-arrive'" class="time-select" [value]="i">{{i}}:15</mat-option>
-            <mat-option [id]="i + '-arrive'" class="time-select" [value]="i">{{i}}:30</mat-option>
-            <mat-option [id]="i + '-arrive'" class="time-select" [value]="i">{{i}}:45</mat-option>
+            <mat-option [id]="i + '-arrive'" class="time-select" [attr.id]="i + ':00'" [value]="i + ':00'">
+              {{i}}:00
+            </mat-option>
+
+            <mat-option [id]="i + '-arrive'" class="time-select" [value]="i + ':15'">{{i}}:15</mat-option>
+
+            <mat-option [id]="i + '-arrive'" class="time-select" [value]="i + ':30'">{{i}}:30</mat-option>
+
+            <mat-option [id]="i + '-arrive'" class="time-select" [value]="i + ':45'">{{i}}:45</mat-option>
           </ng-container>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Choose leaving time</mat-label>
-        <mat-select [(value)]="selected" (openedChange)="scrollIntoView('leave')">
+        <mat-label>Leaving Time</mat-label>
+
+        <mat-select (valueChange)="bookingForm.controls.leavingTime.setValue($event)" (openedChange)="scrollIntoView('leave')"
+                    formControlName="leavingTime">
           <mat-select-trigger>
-            {{selected}}:00
+            {{bookingForm.controls.leavingTime.value}}
           </mat-select-trigger>
+
           <ng-container *ngFor="let item of [].constructor(24); let i = index">
-            <mat-option [id]="i + '-leave'" class="time-select" [attr.id]="i + ':00'" [value]="i">{{i}}:00</mat-option>
-            <mat-option [id]="i + '-leave'" class="time-select" [value]="i">{{i}}:15</mat-option>
-            <mat-option [id]="i + '-leave'" class="time-select" [value]="i">{{i}}:30</mat-option>
-            <mat-option [id]="i + '-leave'" class="time-select" [value]="i">{{i}}:45</mat-option>
+            <mat-option [id]="i + '-leave'" class="time-select" [attr.id]="i + ':00'" [value]="i + ':00'">
+              {{i}}:00
+            </mat-option>
+
+            <mat-option [id]="i + '-leave'" class="time-select" [value]="i + ':15'">{{i}}:15</mat-option>
+
+            <mat-option [id]="i + '-leave'" class="time-select" [value]="i + ':30'">{{i}}:30</mat-option>
+
+            <mat-option [id]="i + '-leave'" class="time-select" [value]="i + ':45'">{{i}}:45</mat-option>
           </ng-container>
         </mat-select>
       </mat-form-field>
     </div>
 
-    <button mat-button>
+    <mat-checkbox [disabled]="bookingForm.controls.eatery.value === null" [checked]="bookingForm.controls.didOrder.value"
+                  (change)="onOrderFoodChange()" class="mb-4" formControlName="didOrder">
+      Add food to the order
+    </mat-checkbox>
+
+    <div *ngIf="bookingForm.controls.didOrder.value && bookingForm.controls.eatery.value" class="flex flex-wrap
+      justify-center gap-4 py-4">
+      <mat-card *ngFor="let food of eateryFoods$ | async; let i = index" class="text-center h-card-clamp">
+        <img matTooltipClass="multiline-tooltip" [matTooltip]="getIngredients(food.ingredients)"
+             matTooltipPosition="above"
+             class="rounded-md mat-elevation-z2"
+             ngSrc="https://groundbeefrecipes.com/wp-content/uploads/double-bacon-cheeseburger-recipe-6-500x500.jpg"
+             height="100" width="200" priority>
+
+        <span>{{food.name}}</span>
+
+        <span class="font-bold">{{food.price}}$</span>
+
+        <div class="flex mx-auto">
+          <button mat-icon-button type="button" (click)="decreaseQuantity(food)">
+            <mat-icon>remove</mat-icon>
+          </button>
+
+          <input class="w-16 text-center" matInput readonly [value]="(food.quantity ?? 0).toString()">
+
+          <button mat-icon-button type="button" (click)="increaseQuantity(food)">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </mat-card>
+    </div>
+
+    <button [disabled]="disabledSubmit" mat-button type="submit" class="bg-accent text-white max-w-md mx-auto w-full
+      min-h-[32px]">
       Submit
     </button>
-  </form>
-</div>
+  </mat-card>
+</form>
